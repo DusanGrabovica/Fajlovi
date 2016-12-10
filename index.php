@@ -2,6 +2,10 @@
 session_start();
 include_once 'dbconnect.php';
 
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,6 +65,69 @@ include_once 'dbconnect.php';
     <h3 class="panel-title">Snimljeni fajlovi</h3>
   </div>
   <div class="panel-body">
+      
+      
+       <?php
+       
+ $curdir= getcwd();
+         
+ $imeFoldera=$_SESSION['usr_name'];
+ $GLOBALS['a'] = $imeFoldera;
+
+if(mkdir($curdir."/$imeFoldera",077)){
+    echo 'folder kreiran';
+}  else {
+    echo 'folder nije kreiran';
+}
+       
+       
+        
+	if(isset($_FILES['file'])){
+		$file=$_FILES['file'];
+		
+                
+                //svojstva fajla
+                
+                $file_name=$file['name'];
+                $file_tmp=$file['tmp_name'];
+                $file_size=$file['size'];
+                $file_error = $file['error'];
+                $imeKorisnikovogFoldera =  $GLOBALS['a'];
+                //ekstenzije fajla
+                
+                $file_ext=explode('.',$file_name);
+                
+                $file_ext = strtolower(end($file_ext));
+                
+                $allowed = array('txt','jpg');
+                
+                if(in_array($file_ext, $allowed)){
+                    if($file_error==0){
+                            if($file_size <= 2097152){
+                                
+                                $file_name_new= uniqid('',true). '.' .$file_ext;
+                                $file_destination = "$imeKorisnikovogFoldera/" .$file_name_new;
+                                
+                                if(move_uploaded_file($file_tmp,$file_destination )){
+                                    echo $file_destination;
+                                }
+                            }
+                    }
+                    
+                }
+                
+        }
+	
+
+        
+        
+        
+        ?>
+      
+      
+      
+      
+      
     
    
     
